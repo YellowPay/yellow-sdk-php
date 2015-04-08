@@ -56,12 +56,13 @@ class Invoice implements InvoiceInterface
         return $this;
     }
 
-    public function createInvoice($amount, $currency)
+    public function createInvoice($amount, $currency,$callback = "")
     {
         try {
             $payload = [
-                'base_ccy' => $currency,
-                'base_price' => $amount
+                'base_ccy'   => $currency,
+                'base_price' => $amount,
+                'callback'   => $callback
             ];
             $body = json_encode($payload);
             $nonce = round(microtime(true) * 1000);
