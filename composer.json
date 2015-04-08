@@ -1,0 +1,43 @@
+{
+    "name": "YellowPay PHP SDK",
+    "type": "library",
+    "description": "",
+    "keywords": [
+        "bitcoin",
+        "http",
+        "YellowPay",
+        "payments",
+        "curl",
+        "client",
+        "HTTP client"
+    ],
+    "homepage": "http://yellowpay.co/en/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tawfek Daghistani",
+            "email": "tawfelov@gmail.com",
+            "homepage": "https://github.com/tawfekov"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "~5.0",
+        "ext-curl": "*",
+        "ext-hash" : "~1.0",
+        "ext-json" : "~1.0"
+    },
+    "require-dev": {
+        "psr/log": "~1.0",
+        "phpunit/phpunit": "~4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Yellow\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Yellow\\Tests\\": "tests/"
+        }
+    }
+}   
