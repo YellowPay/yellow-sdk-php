@@ -104,7 +104,7 @@ class Invoice implements InvoiceInterface
     {
         try {
             $url      = $this->server_root . str_replace("[id]", $id, $this->api_uri_check_payment);
-            $data     = $this->createHTTPData($url , array() ,$id);
+            $data     = $this->createHTTPData($url , array());
             $client   = new Client();
             $response = $client->get($url, $data);
             $body     = (string) $response->getBody();
@@ -133,10 +133,9 @@ class Invoice implements InvoiceInterface
      *
      * @param $url url used to create signature
      * @param array $payload payload array
-     * @param string $id invoice id
      * @return array
      */
-    private function createHTTPData($url , $payload = array() , $id = "")
+    private function createHTTPData($url , $payload = array() )
     {
     	$nonce = round(microtime(true) * 1000);
 	    if(!empty($payload)){
@@ -165,4 +164,5 @@ class Invoice implements InvoiceInterface
         }
         return $data;
     }
+
 }

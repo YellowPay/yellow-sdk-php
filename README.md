@@ -1,6 +1,4 @@
 # Yellow SDK PHP
-## Introduction :
-
 
 ## Installation :
 Get more information  with the
@@ -32,8 +30,8 @@ require 'vendor/autoload.php';
 <?php
 use Yellow\Bitcoin\Invoice;
 $api_key = "Your API public key";
-$api_secert = "Your API Private key";
-$yellow = new Invoice($api_key,$api_secert);
+$api_secret = "Your API Private key";
+$yellow = new Invoice($api_key,$api_secret);
 /// this will return an array with invoice data
 $invoice  = $yellow->createInvoice(10,"USD","http://yourstore.local/checkout/status/");
 var_dump($invoice);
