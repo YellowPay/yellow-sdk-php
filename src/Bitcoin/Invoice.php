@@ -119,6 +119,37 @@ class Invoice implements InvoiceInterface
     }
 
     /**
+     * validate IPN
+     * @return bool
+     */
+    public function verifyIPN()
+    {
+        $url       = $this->getCurrentUrl();
+        $headers   = getallheaders();
+        $signature = $headers["API-Sign"];
+        $api_key   = $headers["API-Key"];
+        $nonce     = $headers["API-Nonce"];
+        $payload   =  file_get_contents("php://input"); //// raw post body
+        /// or we could use
+        /// $payload   =  stream_get_contents(STDIN);
+
+        if (!$api_key || !$nonce || !$signature || $payload == "") {
+            //// missing headers OR an empty payload
+            return false;
+        }
+
+        $message = $nonce . $url . $payload;
+        $calculated_signature = $this->encryptMessage($message);
+        if($calculated_signature <> $signature ){
+            //// invalid IPN call
+            return false;
+        }
+        //// valid IPN call
+        return true;
+
+    }
+
+    /**
      * get OS / PHP version
      *
      * @return string
@@ -146,7 +177,7 @@ class Invoice implements InvoiceInterface
         	$message     = $nonce . $url;
         	$append_body = false;
         }
-	    $signature = hash_hmac("sha256", $message, $this->api_secret, false);
+	    $signature = $this->encryptMessage($message);
         $data = [
             'headers'          => [
                 'API-Key'      => $this->api_key,
@@ -163,6 +194,36 @@ class Invoice implements InvoiceInterface
         	$data["body"] = $body;
         }
         return $data;
+    }
+
+    /**
+     * encrypt message using hash_hmac
+     * @param $message string
+     * @return string
+     */
+    private function encryptMessage($message)
+    {
+        return hash_hmac("sha256", $message, $this->api_secret, false);
+    }
+
+    /**
+     * get current url
+     * @return mixed
+     */
+    private function getCurrentUrl()
+    {
+        $s = &$_SERVER;
+        $ssl = (!empty($s['HTTPS']) && $s['HTTPS'] == 'on') ? true:false;
+        $sp = strtolower($s['SERVER_PROTOCOL']);
+        $protocol = substr($sp, 0, strpos($sp, '/')) . (($ssl) ? 's' : '');
+        $port = $s['SERVER_PORT'];
+        $port = ((!$ssl && $port=='80') || ($ssl && $port=='443')) ? '' : ':'.$port;
+        $host = isset($s['HTTP_X_FORWARDED_HOST']) ? $s['HTTP_X_FORWARDED_HOST'] : (isset($s['HTTP_HOST']) ? $s['HTTP_HOST'] : null);
+        $host = isset($host) ? $host : $s['SERVER_NAME'] . $port;
+        $uri = $protocol . '://' . $host . $s['REQUEST_URI'];
+        $segments = explode('?', $uri, 2);
+        $url = $segments[0];
+        return $url;
     }
 
 }

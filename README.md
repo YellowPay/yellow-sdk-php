@@ -40,6 +40,18 @@ $status = $yellow->checkInvoiceStatus($invoice["id"]);
 var_dump($status);
 ```
 
+### IPN validation :
+ to validate the IPN simply use following snippet on your IPN page/controller 
+```php
+ <?php
+ use Yellow\Bitcoin\Invoice;
+ $api_key = "Your API public key";
+ $api_secret = "Your API Private key";
+ $yellow = new Invoice($api_key,$api_secret);
+ $isValidIPN = $yellow->verifyIPN(); //bool
+ var_dump($isValidIPN);
+```
+
 ### Documentation
 
 More information can be found in the online documentation at
