@@ -1,3 +1,3 @@
 <?php
-$api_key = "";
-$api_secert = "";
+$api_key = "your public key";
+$api_secret = "your private key";

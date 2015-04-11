@@ -125,10 +125,9 @@ class Invoice implements InvoiceInterface
     public function verifyIPN()
     {
         $url       = $this->getCurrentUrl();
-        $headers   = getallheaders();
-        $signature = $headers["API-Sign"];
-        $api_key   = $headers["API-Key"];
-        $nonce     = $headers["API-Nonce"];
+        $signature = $_SERVER["HTTP_API_SIGN"];
+        $api_key   = $_SERVER["HTTP_API_KEY"];
+        $nonce     = $_SERVER["HTTP_API_NONCE"];
         $payload   =  file_get_contents("php://input"); //// raw post body
         /// or we could use
         /// $payload   =  stream_get_contents(STDIN);
