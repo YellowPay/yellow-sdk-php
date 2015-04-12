@@ -118,11 +118,48 @@ class Invoice implements InvoiceInterface
         }
     }
 
+
     /**
      * validate IPN
+     * @param $paramas =  array(
+     *    "url"       => "current url", /// current url
+     *    "API-Sign"  => "API Signature" , //// Header
+     *    "API-Key"   => "API Key" , //// Header
+     *    "API-Nonce" => "API Nonce" , //// Header
+     *    "body"      => "raw body" /// post body
+     * )
      * @return bool
      */
-    public function verifyIPN()
+    public function verifyIPN($params)
+    {
+        $url       = $params["url"];
+        $signature = $params["API-Sign"];
+        $api_key   = $params["API-Key"];
+        $nonce     = $params["API-Nonce"];
+        $payload   = $params['body'];
+
+        if (!$api_key || !$nonce || !$signature || $payload == "") {
+            //// missing headers OR an empty payload
+            return false;
+        }
+
+        $message = $nonce . $url . $payload;
+        $calculated_signature = $this->signMessage($message);
+        if($calculated_signature <> $signature ){
+            //// invalid IPN call
+            return false;
+        }
+        //// valid IPN call
+        return true;
+
+    }
+
+
+    /**
+     * easily validate IPN
+     * @return bool
+     */
+    public function easyVerifyIPN()
     {
         $url       = $this->getCurrentUrl();
         $signature = $_SERVER["HTTP_API_SIGN"];
@@ -138,7 +175,7 @@ class Invoice implements InvoiceInterface
         }
 
         $message = $nonce . $url . $payload;
-        $calculated_signature = $this->encryptMessage($message);
+        $calculated_signature = $this->signMessage($message);
         if($calculated_signature <> $signature ){
             //// invalid IPN call
             return false;
@@ -176,7 +213,7 @@ class Invoice implements InvoiceInterface
         	$message     = $nonce . $url;
         	$append_body = false;
         }
-	    $signature = $this->encryptMessage($message);
+	    $signature = $this->signMessage($message);
         $data = [
             'headers'          => [
                 'API-Key'      => $this->api_key,
@@ -196,11 +233,11 @@ class Invoice implements InvoiceInterface
     }
 
     /**
-     * encrypt message using hash_hmac
+     * sign message using hash_hmac
      * @param $message string
      * @return string
      */
-    private function encryptMessage($message)
+    private function signMessage($message)
     {
         return hash_hmac("sha256", $message, $this->api_secret, false);
     }
@@ -209,7 +246,7 @@ class Invoice implements InvoiceInterface
      * get current url
      * @return mixed
      */
-    private function getCurrentUrl()
+    public function getCurrentUrl()
     {
         $s = &$_SERVER;
         $ssl = (!empty($s['HTTPS']) && $s['HTTPS'] == 'on') ? true:false;
