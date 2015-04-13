@@ -118,32 +118,23 @@ class Invoice implements InvoiceInterface
         }
     }
 
-
     /**
-     * validate IPN
-     * @param $paramas =  array(
-     *    "url"       => "current url", /// current url
-     *    "API-Sign"  => "API Signature" , //// Header
-     *    "API-Key"   => "API Key" , //// Header
-     *    "API-Nonce" => "API Nonce" , //// Header
-     *    "body"      => "raw body" /// post body
-     * )
+     * Validate IPN
+     * @param $url string
+     * @param $signature string
+     * @param $key string | public key that sent with IPN headers  
+     * @param $nonce string
+     * @param $body string
      * @return bool
+     *
      */
-    public function verifyIPN($params)
+    public function verifyIPN($url, $signature, $key, $nonce, $body)
     {
-        $url       = $params["url"];
-        $signature = $params["API-Sign"];
-        $api_key   = $params["API-Key"];
-        $nonce     = $params["API-Nonce"];
-        $payload   = $params['body'];
-
-        if (!$api_key || !$nonce || !$signature || $payload == "") {
+        if (!$key || !$nonce || !$signature || $body == "") {
             //// missing headers OR an empty payload
             return false;
         }
-
-        $message = $nonce . $url . $payload;
+        $message = $nonce . $url . $body;
         $calculated_signature = $this->signMessage($message);
         if($calculated_signature <> $signature ){
             //// invalid IPN call
@@ -151,7 +142,6 @@ class Invoice implements InvoiceInterface
         }
         //// valid IPN call
         return true;
-
     }
 
 
