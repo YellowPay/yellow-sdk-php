@@ -187,16 +187,16 @@ class Invoice implements InvoiceInterface
      */
     private function createHTTPData($url , $payload = array() )
     {
-    	$nonce = round(microtime(true) * 1000);
-	    if(!empty($payload)){
-        	$body        = json_encode($payload);
-        	$message     = $nonce . $url . $body;
-        	$append_body = true;
+        $nonce = round(microtime(true) * 1000);
+        if(!empty($payload)){
+            $body        = json_encode($payload);
+            $message     = $nonce . $url . $body;
+            $append_body = true;
         }else{
-        	$message     = $nonce . $url;
-        	$append_body = false;
+            $message     = $nonce . $url;
+            $append_body = false;
         }
-	    $signature = $this->signMessage($message);
+        $signature = $this->signMessage($message);
         $data = [
             'headers'          => [
                 'API-Key'      => $this->api_key,
@@ -210,7 +210,7 @@ class Invoice implements InvoiceInterface
             'timeout'          => 300
         ];
         if($append_body){
-        	$data["body"] = $body;
+            $data["body"] = $body;
         }
         return $data;
     }
