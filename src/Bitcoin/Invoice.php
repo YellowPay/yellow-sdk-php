@@ -67,19 +67,12 @@ class Invoice implements InvoiceInterface
 
     /**
      *
-     * @param $amount double
-     * @param $currency string
-     * @param string $callback string optional
+     * @param $payload array for all api parameters like: amount, currency, callback ... etc.
      * @return \GuzzleHttp\Message\ResponseInterface|mixed|null
      */
-    public function createInvoice($amount, $currency,$callback = "")
+    public function createInvoice($payload = array())
     {
         try {
-        	$payload = [
-                'base_ccy'   => $currency,
-                'base_price' => $amount,
-                'callback'   => $callback
-            ];
             $url      = $this->server_root . $this->api_uri_create_invoice;
             $data     = $this->createHTTPData($url , $payload);
             $client   = new Client();
