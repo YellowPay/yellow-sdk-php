@@ -26,17 +26,9 @@
         "ext-hash" : "~1.0",
         "ext-json" : "~1.0"
     },
-    // "require-dev": {
-    //     "phpunit/phpunit": "~4.0"
-    // },
     "autoload": {
         "psr-4": {
             "Yellow\\": "src/"
         }
-    },
-    // "autoload-dev": {
-    //     "psr-4": {
-    //         "Yellow\\Tests\\": "tests/"
-    //     }
-    // }
+    }
 }   
