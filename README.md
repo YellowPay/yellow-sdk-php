@@ -33,7 +33,12 @@ $api_key = "Your API public key";
 $api_secret = "Your API Private key";
 $yellow = new Invoice($api_key,$api_secret);
 /// this will return an array with invoice data
-$invoice  = $yellow->createInvoice(10,"USD","http://yourstore.local/checkout/status/");
+$paylaod = array(
+    "base_price" => 10,
+    "base_ccy"   => "USD",
+    "callback"   => "http://yourstore.local/checkout/status/"
+);
+$invoice  = $yellow->createInvoice($payload);
 var_dump($invoice);
 /// this will return an array with invoice status data
 $status = $yellow->checkInvoiceStatus($invoice["id"]);

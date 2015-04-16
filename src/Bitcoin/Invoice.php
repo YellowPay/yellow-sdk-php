@@ -113,13 +113,12 @@ class Invoice implements InvoiceInterface
 
     /**
      * Validate IPN
+     *
      * @param $url string
      * @param $signature string
-     * @param $key string | public key that sent with IPN headers
      * @param $nonce string
-     * @param $body string
+     * @param $key string | public key that sent with IPN headers
      * @return bool
-     *
      */
     public function verifyIPN($url, $signature, $key, $nonce, $body)
     {
