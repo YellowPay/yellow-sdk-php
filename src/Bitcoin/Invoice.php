@@ -98,7 +98,9 @@ class Invoice implements InvoiceInterface
         try {
             $url      = $this->server_root . str_replace("[id]", $id, $this->api_uri_check_payment);
             $data     = $this->createHTTPData($url , array());
-            $client   = new Client();
+            $client   = new Client(['defaults' => [
+                'verify' => false
+            ]]);
             $response = $client->get($url, $data);
             $body     = (string) $response->getBody();
             return json_decode($body , true);
