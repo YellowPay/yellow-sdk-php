@@ -53,7 +53,7 @@ var_dump($status);
  $api_key = "Your API public key";
  $api_secret = "Your API Private key";
  $yellow = new Invoice($api_key,$api_secret);
- $isValidIPN = $yellow->verifyIPN(); //bool
+ $isValidIPN = $yellow->verifyIPN($url, $signature, $key, $nonce, $body); //bool
  var_dump($isValidIPN);
 ```
 
