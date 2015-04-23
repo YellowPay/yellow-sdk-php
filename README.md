@@ -25,6 +25,15 @@ After installing, you need to require Composer's autoloader:
 ```php
 require 'vendor/autoload.php';
 ```
+
+### Dependencies
+
+* PHP 5.4 or higher
+* guzzlehttp/guzzle
+* ext-curl
+* ext-hash
+* ext-json
+
 ## Example :
 ```php
 <?php
