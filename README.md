@@ -29,7 +29,7 @@ require 'vendor/autoload.php';
 ### Dependencies
 
 * PHP 5.4 or higher
-* guzzlehttp/guzzle 1.0
+* guzzlehttp/guzzle 5.0
 * ext-curl 
 * ext-hash 1.0
 * ext-json 1.0
